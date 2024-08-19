@@ -2,6 +2,10 @@ import React, { useState, useEffect } from 'react';
 import './App.css';
 import Axios from 'axios';
 import { Line } from 'react-chartjs-2';
+import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
+
+// Register Chart.js components
+ChartJS.register(LineElement, CategoryScale, LinearScale, Tooltip, Legend);
 
 const App = () => {
   const [city, setCity] = useState('London');
@@ -15,12 +19,15 @@ const App = () => {
 
   const fetchWeatherData = async (city) => {
     try {
-      const apiKey = process.env.REACT_APP_WEATHER_API_KEY;
-      const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}&units=metric`;
-      const forecastWeatherURL = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}&units=metric`;
+      const apiKey = process.env.REACT_APP_API_KEY; // Use environment variable for API key
+      const encodedCity = encodeURIComponent(city);
+      const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${encodedCity}&appid=${apiKey}&units=metric`;
+      const forecastWeatherURL = `https://api.openweathermap.org/data/2.5/forecast?q=${encodedCity}&appid=${apiKey}&units=metric`;
 
-      const currentResponse = await Axios.get(currentWeatherURL);
-      const forecastResponse = await Axios.get(forecastWeatherURL);
+      const [currentResponse, forecastResponse] = await Promise.all([
+        Axios.get(currentWeatherURL),
+        Axios.get(forecastWeatherURL),
+      ]);
 
       setWeatherData(currentResponse.data);
       setForecastData(forecastResponse.data);
@@ -81,6 +88,18 @@ const App = () => {
 
     const options = {
       responsive: true,
+      plugins: {
+        legend: {
+          position: 'top',
+        },
+        tooltip: {
+          callbacks: {
+            label: (context) => {
+              return `${context.dataset.label}: ${context.parsed.y}`;
+            },
+          },
+        },
+      },
       scales: {
         x: {
           display: true,
