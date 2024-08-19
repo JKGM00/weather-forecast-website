@@ -13,21 +13,27 @@
   color: white;
 }
 
-.current-weather, .forecast {
-  margin-top: 20px;
+.current-weather,
+.forecast {
+  margin: 20px;
 }
 
 .forecast-container {
   display: flex;
-  justify-content: center;
   flex-wrap: wrap;
+  justify-content: center;
 }
 
 .forecast-item {
-  background: #61dafb;
-  padding: 10px;
+  background-color: #444;
   margin: 10px;
-  border-radius: 8px;
-  width: 150px;
+  padding: 10px;
+  border-radius: 5px;
   text-align: left;
+  color: white;
+}
+
+.error {
+  color: red;
+  margin: 20px;
 }

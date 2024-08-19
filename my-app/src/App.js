@@ -1,8 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import './App.css';
-import Axios from 'axios';
 import { Line } from 'react-chartjs-2';
-import { Chart as ChartJS, LineElement, CategoryScale, LinearScale, Tooltip, Legend } from 'chart.js';
+import {
+  Chart as ChartJS,
+  LineElement,
+  CategoryScale,
+  LinearScale,
+  Tooltip,
+  Legend
+} from 'chart.js';
+import axios from 'axios';
 
 // Register Chart.js components
 ChartJS.register(LineElement, CategoryScale, LinearScale, Tooltip, Legend);
@@ -19,14 +26,14 @@ const App = () => {
 
   const fetchWeatherData = async (city) => {
     try {
-      const apiKey = process.env.REACT_APP_API_KEY; // Use environment variable for API key
+      const apiKey = 'bdb1235b895b0a87cd893e6ae24e0b67';
       const encodedCity = encodeURIComponent(city);
       const currentWeatherURL = `https://api.openweathermap.org/data/2.5/weather?q=${encodedCity}&appid=${apiKey}&units=metric`;
       const forecastWeatherURL = `https://api.openweathermap.org/data/2.5/forecast?q=${encodedCity}&appid=${apiKey}&units=metric`;
 
       const [currentResponse, forecastResponse] = await Promise.all([
-        Axios.get(currentWeatherURL),
-        Axios.get(forecastWeatherURL),
+        axios.get(currentWeatherURL),
+        axios.get(forecastWeatherURL),
       ]);
 
       setWeatherData(currentResponse.data);
